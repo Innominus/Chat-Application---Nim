@@ -1,4 +1,6 @@
-import os, threadpool, asyncdispatch, asyncnet, protocol
+import os, threadpool, asyncdispatch, asyncnet, protocol, terminal
+
+
 
 proc connect(socket: AsyncSocket, serverAddr: string) {.async.} =
     echo("Connecting to ", serverAddr)
@@ -9,13 +11,18 @@ proc connect(socket: AsyncSocket, serverAddr: string) {.async.} =
         let line = await socket.recvLine()
         let parsed = parseMessage(line)
         echo(parsed.username, " said ", parsed.message)
+        
+        
 
 echo("Chat application started")
 
-if paramCount() == 0:
-    quit("Please specify the server address, e.g. ./client localhost")
+#if paramCount() == 0:
+#    quit("Please specify the server address, e.g. ./client localhost")
+#let serverAddr = paramStr(1)
+const serverAddr: string = "localhost"
 
-let serverAddr = paramStr(1)
+#const serverAddr: string = "206.189.92.126"
+
 var socket = newAsyncSocket()
 asyncCheck connect(socket, serverAddr)
 
